@@ -1,12 +1,12 @@
 Cargo.toml
 ``` toml
-alternate_screen_wraper = { version = "<current-version>", features = "crossterm" } # or other backand
+alternate_screen_wrapper = { version = "<current-version>", features = "crossterm" } # or other backand
 ```
 
 main.rs
 ``` rust
 fn main() {
-    let alternate_screen = alternater_screen_wrapper::AlternateScreen::enter();
+    let alternate_screen = alternate_screen_wrapper::AlternateScreen::enter();
     // ..do some work
     let printable = // do other work
     // 
@@ -15,4 +15,4 @@ fn main() {
 }
 ```
 
-You can don't call drop manually. It will be dropped automatically when you exiting scope or panicing.
+You can don't call drop manually. It will be dropped automatically when you exiting scope or panicking.
