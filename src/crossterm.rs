@@ -1,11 +1,11 @@
-use crossterm::{
-    event::{DisableBracketedPaste, EnableBracketedPaste},
-    execute,
-    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
-};
 use std::{
     io::stdout,
     panic::{set_hook, take_hook},
+};
+
+use crossterm::{
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 
 #[non_exhaustive]
@@ -17,8 +17,9 @@ impl AlternateScreen {
         enable_raw_mode()?;
         Ok(Self {})
     }
+    #[cfg(feature = "crossterm-bracketed-paste")]
     pub fn bracketed_paste(self) -> std::io::Result<Self> {
-        execute!(stdout(), EnableBracketedPaste)?;
+        execute!(stdout(), crossterm::event::EnableBracketedPaste)?;
         Ok(self)
     }
 }
@@ -32,11 +33,15 @@ impl Drop for AlternateScreen {
 
 fn restore_tui() -> std::io::Result<()> {
     disable_raw_mode()?;
+
+    #[cfg(feature = "crossterm-bracketed-paste")]
     execute!(
         std::io::stdout(),
         LeaveAlternateScreen,
-        DisableBracketedPaste
+        crossterm::event::DisableBracketedPaste
     )?;
+    #[cfg(not(feature = "crossterm-bracketed-paste"))]
+    execute!(std::io::stdout(), LeaveAlternateScreen)?;
     Ok(())
 }
 
