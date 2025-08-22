@@ -25,13 +25,13 @@ impl AlternateScreen {
 }
 impl Drop for AlternateScreen {
     fn drop(&mut self) {
-        if let Err(err) = restore_tui() {
+        if let Err(err) = restore_terminal() {
             eprintln!("Error: {err}");
         }
     }
 }
 
-fn restore_tui() -> std::io::Result<()> {
+pub fn restore_terminal() -> std::io::Result<()> {
     disable_raw_mode()?;
 
     #[cfg(feature = "crossterm-bracketed-paste")]
@@ -49,7 +49,7 @@ fn init_panic_hook() {
     let original_hook = take_hook();
     set_hook(Box::new(move |panic_info| {
         // intentionally ignore errors here since we're already in a panic
-        let _ = restore_tui();
+        let _ = restore_terminal();
         original_hook(panic_info);
     }));
 }
