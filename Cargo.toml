@@ -3,11 +3,12 @@ name = "alternate_screen_wrapper"
 description = "enter end leave alternate screen in one line"
 repository = "https://github.com/sineptic/alternate_screen_wrapper"
 license = "MIT"
-version = "0.3.0"
+version = "0.3.1"
 edition = "2024"
 
 [dependencies]
 crossterm = { version = "0.29.0", optional = true, default-features = false }
+rustix = { version = "1.0.8", optional = true, default-features = false }
 
 [features]
 crossterm = ["dep:crossterm"]
@@ -16,3 +17,4 @@ crossterm-bracketed-paste = [
     "crossterm/bracketed-paste",
     "crossterm/events",
 ]
+unix = ["dep:rustix"]
